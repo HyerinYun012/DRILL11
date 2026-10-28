@@ -4,7 +4,7 @@ import time
 from pico2d import (
     load_image,
     SDL_KEYDOWN, SDL_KEYUP,
-    SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT,
+    SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_a,
 )
 from transitions import Machine
 
@@ -106,7 +106,9 @@ class Boy:
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
-            if event.key == SDLK_SPACE and self.is_SLEEP():
+            if event.key == SDLK_a and self.is_IDLE():
+                self.start_auto_run()
+            elif event.key == SDLK_SPACE and self.is_SLEEP():
                 self.wake_up()
             elif event.key == SDLK_LEFT:
                 self.left_pressed = True
