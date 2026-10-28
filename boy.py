@@ -22,6 +22,7 @@ class AutoRun:
 
     def update(self):
         self.boy.frame = (self.boy.frame + 1) % 8
+        self.boy.x += self.boy.RUN_SPEED * self.boy.face_dir
 
     def draw(self):
         row_y = self.boy.SPRITE_SIZE if self.boy.face_dir == 1 else 0
