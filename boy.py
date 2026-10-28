@@ -51,6 +51,21 @@ class AutoRun:
             self.boy.AUTO_RUN_SIZE
         )
 
+    def handle_event(self, event):
+        if event.type != SDL_KEYDOWN:
+            return
+
+        if event.key == SDLK_LEFT:
+            self.boy.left_pressed = True
+            self.boy.right_pressed = False
+            self.boy.face_dir = -1
+            self.boy.cancel_auto_run()
+        elif event.key == SDLK_RIGHT:
+            self.boy.left_pressed = False
+            self.boy.right_pressed = True
+            self.boy.face_dir = 1
+            self.boy.cancel_auto_run()
+
 
 class Boy:
     CANVAS_WIDTH = 800
@@ -127,6 +142,10 @@ class Boy:
         )
 
     def handle_event(self, event):
+        if self.is_AUTO_RUN():
+            self.auto_run.handle_event(event)
+            return
+
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_a and self.is_IDLE():
                 self.start_auto_run()
