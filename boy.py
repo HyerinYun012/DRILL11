@@ -21,6 +21,10 @@ class AutoRun:
         self.boy.frame = 0
 
     def update(self):
+        if time.monotonic() - self.started_at >= self.boy.AUTO_RUN_DURATION:
+            self.boy.auto_run_timeout()
+            return
+
         self.boy.frame = (self.boy.frame + 1) % 8
         self.boy.x += self.boy.AUTO_RUN_SPEED * self.boy.face_dir
 
@@ -57,6 +61,7 @@ class Boy:
     AUTO_RUN_SCALE = 1.5
     AUTO_RUN_SIZE = int(SPRITE_SIZE * AUTO_RUN_SCALE)
     AUTO_RUN_HALF_WIDTH = AUTO_RUN_SIZE // 2
+    AUTO_RUN_DURATION = 5.0
 
     BREATH_CYCLE_SECONDS = 2.5
     BREATH_SCALE = 0.04
