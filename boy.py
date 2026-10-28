@@ -22,7 +22,7 @@ class AutoRun:
 
     def update(self):
         self.boy.frame = (self.boy.frame + 1) % 8
-        self.boy.x += self.boy.RUN_SPEED * self.boy.face_dir
+        self.boy.x += self.boy.AUTO_RUN_SPEED * self.boy.face_dir
 
     def draw(self):
         row_y = self.boy.SPRITE_SIZE if self.boy.face_dir == 1 else 0
@@ -41,6 +41,7 @@ class Boy:
     SPRITE_SIZE = 100
     CHARACTER_HALF_WIDTH = SPRITE_SIZE // 2
     RUN_SPEED = 5
+    AUTO_RUN_SPEED = RUN_SPEED * 2
 
     BREATH_CYCLE_SECONDS = 2.5
     BREATH_SCALE = 0.04
