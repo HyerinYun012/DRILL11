@@ -86,6 +86,8 @@ class Boy:
             self.update_idle()
         elif self.is_RUN():
             self.update_run()
+        elif self.is_AUTO_RUN():
+            self.auto_run.update()
 
     def update_idle(self):
         if time.monotonic() - self.idle_started_at >= 5.0:
@@ -152,6 +154,8 @@ class Boy:
             self.draw_idle()
         elif self.is_RUN():
             self.draw_run()
+        elif self.is_AUTO_RUN():
+            self.auto_run.draw()
         elif self.is_SLEEP():
             self.draw_sleep()
 
