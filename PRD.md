@@ -71,7 +71,7 @@
 | FR-01 | AutoRun 진입 | `IDLE` 상태에서 `A` 키의 `SDL_KEYDOWN` 이벤트가 발생하면 `AutoRun`으로 전환한다. |
 | FR-02 | 상태 클래스 | `boy.py`에 이름이 명확한 `AutoRun` 클래스를 추가한다. 자동 달리기의 진입, 갱신, 그리기 또는 이벤트 처리 책임을 이 클래스에 둔다. |
 | FR-03 | 자동 이동 | `AutoRun` 동안 방향키가 눌리지 않아도 매 업데이트마다 `face_dir` 방향으로 이동한다. |
-| FR-04 | 속도 증가 | `AUTO_RUN_SPEED`는 기존 `RUN_SPEED`의 2배인 업데이트 1회당 10픽셀을 기본값으로 한다. |
+| FR-04 | 속도 증가 | `AUTO_RUN_SPEED`는 기존 `RUN_SPEED`의 4배인 업데이트 1회당 20픽셀을 기본값으로 한다. |
 | FR-05 | 크기 확대 | 기존 100×100픽셀 이미지를 1.5배인 150×150픽셀로 렌더링한다. 기존 스프라이트 시트를 재사용한다. |
 | FR-06 | 경계 반전 | 확대된 캐릭터 전체가 화면 안에 머물러야 한다. 중심점 `x`가 왼쪽 75픽셀 또는 오른쪽 725픽셀 경계에 도달하면 위치를 경계 안으로 보정하고 `face_dir`을 반대로 바꾼다. |
 | FR-07 | 제한 시간 | `AutoRun` 진입 시간을 `time.monotonic()`으로 기록하고 경과 시간이 5.0초 이상이면 `IDLE`로 전환한다. |
@@ -113,7 +113,7 @@ stateDiagram-v2
 
     note right of AutoRun
       자동 이동
-      속도 10px/update
+      속도 20px/update
       크기 150x150
       좌우 경계 자동 반전
     end note
@@ -165,7 +165,7 @@ stateDiagram-v2
 | 4 | `feat: register AutoRun state transitions` | 상태 목록과 진입·종료 트리거 등록 | 상태 머신 초기화 오류가 없는지 확인 |
 | 5 | `feat: enter AutoRun with A key` | `IDLE`에서 `A` 키로 상태 진입 | 다른 상태에서 `A` 키가 무시되는지 확인 |
 | 6 | `feat: animate AutoRun movement` | 입력 없이 현재 방향으로 자동 이동 | 무입력 자동 이동 확인 |
-| 7 | `feat: increase AutoRun speed` | 자동 달리기 속도를 10픽셀로 적용 | 일반 `RUN`과 이동 거리 비교 |
+| 7 | `feat: increase AutoRun speed` | 자동 달리기 속도를 20픽셀로 적용 | 일반 `RUN`과 이동 거리 비교 |
 | 8 | `feat: scale AutoRun sprite` | 자동 달리기 크기를 150×150픽셀로 확대 | 상태별 렌더링 크기 확인 |
 | 9 | `feat: reverse AutoRun at boundaries` | 확대 크기를 고려한 경계 보정 및 방향 반전 | 좌우 끝 왕복과 화면 이탈 여부 확인 |
 | 10 | `feat: stop AutoRun after timeout` | 5초 타이머와 `IDLE` 복귀 구현 | 5초 전후 상태 확인 |
@@ -190,7 +190,7 @@ stateDiagram-v2
 ### AC-02: 속도와 크기
 
 - Given: 소년이 `AutoRun` 상태이다.
-- Then: 같은 업데이트 횟수 기준으로 일반 `RUN`보다 2배 빠르게 이동하고 150×150픽셀로 표시된다.
+- Then: 같은 업데이트 횟수 기준으로 일반 `RUN`보다 4배 빠르게 이동하고 150×150픽셀로 표시된다.
 
 ### AC-03: 경계 자동 반전
 
