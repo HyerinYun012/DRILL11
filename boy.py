@@ -9,6 +9,32 @@ from pico2d import (
 from transitions import Machine
 
 
+class AutoRun:
+    """Behavior owned by the automatic running state."""
+
+    def __init__(self, boy):
+        self.boy = boy
+        self.started_at = 0.0
+
+    def enter(self):
+        self.started_at = time.monotonic()
+        self.boy.frame = 0
+
+    def update(self):
+        self.boy.frame = (self.boy.frame + 1) % 8
+
+    def draw(self):
+        row_y = self.boy.SPRITE_SIZE if self.boy.face_dir == 1 else 0
+        self.boy.image.clip_draw(
+            self.boy.frame * self.boy.SPRITE_SIZE,
+            row_y,
+            self.boy.SPRITE_SIZE,
+            self.boy.SPRITE_SIZE,
+            self.boy.x,
+            self.boy.y
+        )
+
+
 class Boy:
     CANVAS_WIDTH = 800
     SPRITE_SIZE = 100
