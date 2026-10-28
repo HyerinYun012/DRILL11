@@ -52,15 +52,26 @@ class AutoRun:
         )
 
     def handle_event(self, event):
+        if event.type == SDL_KEYUP:
+            if event.key == SDLK_LEFT:
+                self.boy.left_pressed = False
+            elif event.key == SDLK_RIGHT:
+                self.boy.right_pressed = False
+            return
+
         if event.type != SDL_KEYDOWN:
             return
 
         if event.key == SDLK_LEFT:
+            if self.boy.left_pressed:
+                return
             self.boy.left_pressed = True
             self.boy.right_pressed = False
             self.boy.face_dir = -1
             self.boy.cancel_auto_run()
         elif event.key == SDLK_RIGHT:
+            if self.boy.right_pressed:
+                return
             self.boy.left_pressed = False
             self.boy.right_pressed = True
             self.boy.face_dir = 1
@@ -94,7 +105,7 @@ class Boy:
         {'trigger': 'wake_up', 'source': 'SLEEP', 'dest': 'IDLE'},
         {'trigger': 'start_run', 'source': ['IDLE', 'SLEEP'], 'dest': 'RUN'},
         {'trigger': 'stop_run', 'source': 'RUN', 'dest': 'IDLE'},
-        {'trigger': 'start_auto_run', 'source': 'IDLE', 'dest': 'AUTO_RUN'},
+        {'trigger': 'start_auto_run', 'source': ['IDLE', 'RUN'], 'dest': 'AUTO_RUN'},
         {'trigger': 'auto_run_timeout', 'source': 'AUTO_RUN', 'dest': 'IDLE'},
         {'trigger': 'cancel_auto_run', 'source': 'AUTO_RUN', 'dest': 'RUN'},
     ]
@@ -147,7 +158,7 @@ class Boy:
             return
 
         if event.type == SDL_KEYDOWN:
-            if event.key == SDLK_a and self.is_IDLE():
+            if event.key == SDLK_a and (self.is_IDLE() or self.is_RUN()):
                 self.start_auto_run()
             elif event.key == SDLK_SPACE and self.is_SLEEP():
                 self.wake_up()

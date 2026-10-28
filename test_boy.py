@@ -110,6 +110,44 @@ class AutoRunTests(unittest.TestCase):
         self.enter_auto_run()
         self.assertIsInstance(self.character.auto_run, boy.AutoRun)
 
+    def test_a_key_enters_auto_run_while_direction_is_held(self):
+        self.character.handle_event(
+            key_event(boy.SDL_KEYDOWN, boy.SDLK_RIGHT)
+        )
+        self.assertTrue(self.character.is_RUN())
+        self.assertTrue(self.character.right_pressed)
+
+        self.character.handle_event(key_event(boy.SDL_KEYDOWN, boy.SDLK_a))
+
+        self.assertTrue(self.character.is_AUTO_RUN())
+        self.assertEqual(self.character.face_dir, 1)
+        self.assertTrue(self.character.right_pressed)
+
+        start_x = self.character.x
+        self.clock.return_value = 1.0
+        self.character.update()
+        self.character.draw()
+
+        self.assertEqual(
+            self.character.x - start_x,
+            self.character.RUN_SPEED * 3
+        )
+        self.assertEqual(
+            self.character.image.clip_draw_calls[-1][-2:],
+            (150, 150)
+        )
+
+        self.character.handle_event(
+            key_event(boy.SDL_KEYDOWN, boy.SDLK_RIGHT)
+        )
+        self.assertTrue(self.character.is_AUTO_RUN())
+
+        self.character.handle_event(
+            key_event(boy.SDL_KEYUP, boy.SDLK_RIGHT)
+        )
+        self.assertTrue(self.character.is_AUTO_RUN())
+        self.assertFalse(self.character.right_pressed)
+
     def test_auto_run_moves_at_three_times_the_normal_speed(self):
         self.enter_auto_run()
         start_x = self.character.x
@@ -184,13 +222,7 @@ class AutoRunTests(unittest.TestCase):
         self.assertEqual(self.character.face_dir, 1)
         self.assertTrue(self.character.right_pressed)
 
-    def test_a_key_is_ignored_outside_idle(self):
-        self.character.handle_event(
-            key_event(boy.SDL_KEYDOWN, boy.SDLK_RIGHT)
-        )
-        self.character.handle_event(key_event(boy.SDL_KEYDOWN, boy.SDLK_a))
-        self.assertTrue(self.character.is_RUN())
-
+    def test_a_key_is_ignored_while_sleeping(self):
         sleeping_character = boy.Boy()
         sleeping_character.fall_asleep()
         sleeping_character.handle_event(
