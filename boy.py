@@ -49,6 +49,7 @@ class Boy:
         {'name': 'IDLE', 'on_enter': 'enter_idle'},
         {'name': 'RUN', 'on_enter': 'enter_run'},
         {'name': 'SLEEP', 'on_enter': 'enter_sleep'},
+        {'name': 'AUTO_RUN', 'on_enter': 'enter_auto_run'},
     ]
 
     transitions = [
@@ -56,6 +57,9 @@ class Boy:
         {'trigger': 'wake_up', 'source': 'SLEEP', 'dest': 'IDLE'},
         {'trigger': 'start_run', 'source': ['IDLE', 'SLEEP'], 'dest': 'RUN'},
         {'trigger': 'stop_run', 'source': 'RUN', 'dest': 'IDLE'},
+        {'trigger': 'start_auto_run', 'source': 'IDLE', 'dest': 'AUTO_RUN'},
+        {'trigger': 'auto_run_timeout', 'source': 'AUTO_RUN', 'dest': 'IDLE'},
+        {'trigger': 'cancel_auto_run', 'source': 'AUTO_RUN', 'dest': 'RUN'},
     ]
 
     def __init__(self):
@@ -67,6 +71,7 @@ class Boy:
         self.idle_started_at = time.monotonic()
         self.sleep_started_at = 0.0
         self.image = load_image('animation_sheet.png')
+        self.auto_run = AutoRun(self)
 
         self.state_machine = Machine(
             model=self,
@@ -138,6 +143,9 @@ class Boy:
         self.left_pressed = False
         self.right_pressed = False
         self.sleep_started_at = time.monotonic()
+
+    def enter_auto_run(self):
+        self.auto_run.enter()
 
     def draw(self):
         if self.is_IDLE():
