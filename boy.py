@@ -11,7 +11,8 @@ from transitions import Machine
 
 class Boy:
     CANVAS_WIDTH = 800
-    CHARACTER_HALF_WIDTH = 50
+    SPRITE_SIZE = 100
+    CHARACTER_HALF_WIDTH = SPRITE_SIZE // 2
     RUN_SPEED = 5
 
     BREATH_CYCLE_SECONDS = 2.5
@@ -121,30 +122,38 @@ class Boy:
             self.draw_sleep()
 
     def draw_idle(self):
-        if self.face_dir == 1:
-            self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
-        else:
-            self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
+        row_y = 3 * self.SPRITE_SIZE if self.face_dir == 1 else 2 * self.SPRITE_SIZE
+        self.image.clip_draw(
+            self.frame * self.SPRITE_SIZE,
+            row_y,
+            self.SPRITE_SIZE,
+            self.SPRITE_SIZE,
+            self.x,
+            self.y
+        )
 
     def draw_run(self):
-        row_y = 100 if self.face_dir == 1 else 0
+        row_y = self.SPRITE_SIZE if self.face_dir == 1 else 0
         self.image.clip_draw(
-            self.frame * 100, row_y, 100, 100,
+            self.frame * self.SPRITE_SIZE,
+            row_y,
+            self.SPRITE_SIZE,
+            self.SPRITE_SIZE,
             self.x, self.y
         )
 
     def draw_sleep(self):
-        row_y = 300 if self.face_dir == 1 else 200
+        row_y = 3 * self.SPRITE_SIZE if self.face_dir == 1 else 2 * self.SPRITE_SIZE
         angle = math.pi / 2 if self.face_dir == 1 else -math.pi / 2
 
         sleep_time = time.monotonic() - self.sleep_started_at
         breath_phase = sleep_time * 2.0 * math.pi / self.BREATH_CYCLE_SECONDS
         breath = math.sin(breath_phase)
-        breath_width = 100 * (1.0 + self.BREATH_SCALE * breath)
+        breath_width = self.SPRITE_SIZE * (1.0 + self.BREATH_SCALE * breath)
         breath_y = self.y - 25 + self.BREATH_BOB * breath
 
         self.image.clip_composite_draw(
-            0, row_y, 100, 100,
+            0, row_y, self.SPRITE_SIZE, self.SPRITE_SIZE,
             angle, '', self.x, breath_y,
-            breath_width, 100
+            breath_width, self.SPRITE_SIZE
         )
