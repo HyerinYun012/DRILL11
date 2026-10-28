@@ -24,6 +24,16 @@ class AutoRun:
         self.boy.frame = (self.boy.frame + 1) % 8
         self.boy.x += self.boy.AUTO_RUN_SPEED * self.boy.face_dir
 
+        left_boundary = self.boy.AUTO_RUN_HALF_WIDTH
+        right_boundary = self.boy.CANVAS_WIDTH - self.boy.AUTO_RUN_HALF_WIDTH
+
+        if self.boy.x <= left_boundary:
+            self.boy.x = left_boundary
+            self.boy.face_dir = 1
+        elif self.boy.x >= right_boundary:
+            self.boy.x = right_boundary
+            self.boy.face_dir = -1
+
     def draw(self):
         row_y = self.boy.SPRITE_SIZE if self.boy.face_dir == 1 else 0
         self.boy.image.clip_draw(
@@ -46,6 +56,7 @@ class Boy:
     AUTO_RUN_SPEED = RUN_SPEED * 2
     AUTO_RUN_SCALE = 1.5
     AUTO_RUN_SIZE = int(SPRITE_SIZE * AUTO_RUN_SCALE)
+    AUTO_RUN_HALF_WIDTH = AUTO_RUN_SIZE // 2
 
     BREATH_CYCLE_SECONDS = 2.5
     BREATH_SCALE = 0.04
