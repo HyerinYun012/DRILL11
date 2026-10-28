@@ -32,7 +32,9 @@ class AutoRun:
             self.boy.SPRITE_SIZE,
             self.boy.SPRITE_SIZE,
             self.boy.x,
-            self.boy.y
+            self.boy.y,
+            self.boy.AUTO_RUN_SIZE,
+            self.boy.AUTO_RUN_SIZE
         )
 
 
@@ -42,6 +44,8 @@ class Boy:
     CHARACTER_HALF_WIDTH = SPRITE_SIZE // 2
     RUN_SPEED = 5
     AUTO_RUN_SPEED = RUN_SPEED * 2
+    AUTO_RUN_SCALE = 1.5
+    AUTO_RUN_SIZE = int(SPRITE_SIZE * AUTO_RUN_SCALE)
 
     BREATH_CYCLE_SECONDS = 2.5
     BREATH_SCALE = 0.04
