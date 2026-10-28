@@ -120,6 +120,10 @@ stateDiagram-v2
     end note
 ```
 
+직접 작성한 상태 전이 다이어그램은 아래 이미지로도 제공한다.
+
+![DRILL11 상태 머신](StateMachine.png)
+
 ## 8. 구현 설계 지침
 
 ### `AutoRun` 클래스 책임
