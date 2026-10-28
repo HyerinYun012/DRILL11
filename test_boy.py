@@ -110,7 +110,7 @@ class AutoRunTests(unittest.TestCase):
         self.enter_auto_run()
         self.assertIsInstance(self.character.auto_run, boy.AutoRun)
 
-    def test_auto_run_moves_at_four_times_the_normal_speed(self):
+    def test_auto_run_moves_at_three_times_the_normal_speed(self):
         self.enter_auto_run()
         start_x = self.character.x
         self.clock.return_value = 1.0
@@ -119,7 +119,7 @@ class AutoRunTests(unittest.TestCase):
 
         self.assertEqual(
             self.character.x - start_x,
-            self.character.RUN_SPEED * 4
+            self.character.RUN_SPEED * 3
         )
 
     def test_auto_run_draws_at_enlarged_size(self):
